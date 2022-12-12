@@ -1,0 +1,59 @@
+kind: containerapp
+location: West Europe
+type: Microsoft.App/containerApps
+identity:
+  type: SystemAssigned
+properties:
+  configuration:
+    activeRevisionsMode: Single
+    ingress:
+      allowInsecure: false
+      external: true
+      targetPort: 80
+      traffic:
+      - latestRevision: true
+        weight: 100
+      transport: Auto
+    registries:
+    - passwordSecretRef: unicornnonproduse2acrazurecrio-unicornnonproduse2acr
+      server: unicornnonproduse2acr.azurecr.io
+      username: unicornnonproduse2acr
+    secrets:
+    - name: unicornnonproduse2acrazurecrio-unicornnonproduse2acr
+      value: JB8/47pkflg4v15aZDPgVauho6se1Md8
+  managedEnvironmentId: /subscriptions/05c2ff1d-e24c-4a24-bd2f-932be4796c90/resourceGroups/jksa-container-apps/providers/Microsoft.App/managedEnvironments/my-environment
+  template:
+    revisionSuffix: v1
+    containers:
+    - image: unicornnonproduse2acr.azurecr.io/voting/voting-app/dev:v164706
+      name: voting-app
+      env:
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          value: 2bbcc014-8c91-4c4a-a4df-17093223bed9
+      resources:
+        cpu: 0.5
+        memory: 1Gi
+    - image: unicornnonproduse2acr.azurecr.io/voting/voting-api/dev:v164706
+      name: voting-api
+      env:
+        - name: CosmosDb__SubscriptionId
+          value: ec0308fb-8d6e-497a-9dd6-99c7d9ab7962
+        - name: CosmosDb__Account
+          value: unicorn-nonprod-use2-cosmosdb
+        - name: CosmosDb__ContainerNamePrefix
+          value: dev-
+        - name: CosmosDb__ResourceGroup
+          value: unicorn-nonprod-use2-data-rg
+        - name: CosmosDb__DatabaseName
+          value: voting
+        - name: ENVIRONMENT_FEATURE_NAME
+          value: dev
+        - name: KEY_VAULT_URI
+          value: https://unicorn-nonprod-use2-kv.vault.azure.net/
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          value: 2bbcc014-8c91-4c4a-a4df-17093223bed9
+      resources:
+        cpu: 0.5
+        memory: 1Gi
+    scale:
+      maxReplicas: 10

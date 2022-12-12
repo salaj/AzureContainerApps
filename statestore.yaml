@@ -1,0 +1,12 @@
+# statestore.yaml for Azure Blob storage component
+componentType: state.azure.blobstorage
+version: v1
+metadata:
+- name: accountName
+  value: "jksaeuwsa"
+- name: containerName
+  value: mycontainer
+- name: azureClientId
+  value: "a4020a14-ddac-40b8-967c-8af6cac3dc0d"
+scopes:
+  - voting-api
